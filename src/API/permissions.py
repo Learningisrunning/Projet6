@@ -1,20 +1,12 @@
 from rest_framework.permissions import SAFE_METHODS, BasePermission
-from API.models import Project, Contributor
-
-class IsAContributors(BasePermission):
-    message = 'Seuls les contributeurs peuvent voir le projet'
-    
-    contributors = Contributor.objects.all()
-
-    def has_object_permission(self, request, view, obj):
-       
-       print(obj)
-       if request.method in SAFE_METHODS:
-           return True
-       else :
-          return obj.user_id == request.user.id
+from API.models import Contributor
        
 class IsInTheProject(BasePermission):
+
+    """Mise en place de la permission qui permet de savoir
+        si un utilisateur est contributeur ou auteur
+        et donc de lui accorder des droits en fonction"""
+
     message = "Seul l'auteur de ce projet peut modifier/supprimer et seul les contributeurs du projet peuvent voir"
 
     def has_object_permission(self, request, view, obj):
@@ -27,9 +19,11 @@ class IsInTheProject(BasePermission):
         
         contributors = Contributor.objects.all()
 
+        #On vérifie si le USER fait partie des contributeurs du projet
         for contributor in contributors:
-            if contributor.project_id.id == int(project_actif_id):
+            if contributor.project_id.id == int(project_actif_id) and contributor.user_id == user_connected:
                 validation = True
+                break
             else:
                 validation = False
 

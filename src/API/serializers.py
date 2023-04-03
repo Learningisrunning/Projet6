@@ -7,6 +7,9 @@ from API.models import Project, Contributor, Comment, Issue, User
 
 class ContributorListSerializer(ModelSerializer):
 
+    """Mise en place du sérializer des contributeurs et création de la fonction create()
+        permettant l'ajout d'un contributeur"""
+
     class Meta:
         model = Contributor
         fields = ['id', 'user_id']
@@ -35,6 +38,9 @@ class ContributorDetailSerializer(ModelSerializer):
         fields = ['id', 'user_id','role', 'permission']
 
 class CommentListSerializer(ModelSerializer):
+
+    """Mise en place du sérializer des comments et création de la fonction create()
+        permettant l'ajout d'un comment"""
 
     class Meta:
         model = Comment
@@ -66,7 +72,8 @@ class CommentDetailSerializer(ModelSerializer):
         fields = ['id','author_user', 'created_time', 'description']
 
 class IssueListSerializer(ModelSerializer):
-
+    """Mise en place du sérializer des issues et création de la fonction create()
+        permettant l'ajout d'une issue"""
     class Meta:
         model = Issue
         fields = ['id', 'title', 'tag', 'priority']
@@ -123,10 +130,11 @@ class ProjetsDetailSerializer(ModelSerializer):
         model = Project
         fields = ['id', 'title', 'author_user', 'contributors', 'issues']
     
-    
-
 
 class RegisterSerializer(ModelSerializer):
+
+    """Création du serializer de création de compte
+        Utilisant la base du model USER. Creation de la fonction SAVE()"""
 
     password2 = CharField(style={'input_type' : 'password'}, write_only = True)
 

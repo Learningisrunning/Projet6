@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
-from API.permissions import IsAContributors, IsInTheProject
+from API.permissions import IsInTheProject
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from requests import request
@@ -13,6 +13,10 @@ from API.serializers import IssueDetailSerializer, IssueListSerializer, CommentD
 # Create your views here.
 
 class ProjetsViewset(ModelViewSet):
+
+    """"Mise en place de la vue des projets avec gestion des 
+        vue en list et en détail + filtre pour n'afficher 
+        que les projets liés à l'utilisateur"""
 
     serializer_class = ProjetsListSerializer
     detail_serializer_class = ProjetsDetailSerializer
@@ -37,6 +41,10 @@ class ProjetsViewset(ModelViewSet):
 
 class ContributorViewSet(ModelViewSet):
 
+    """Création de la vue des contributeur en liste 
+       et en détail. Mise en place de la possibilité 
+       d'ajouter un nouveau contributeur"""
+
     serializer_class = ContributorListSerializer
     detail_serializer_class = ContributorDetailSerializer
     permission_classes = [IsAuthenticated]
@@ -59,7 +67,10 @@ class ContributorViewSet(ModelViewSet):
 
 class IssuesrViewSet(ModelViewSet):
     
-    
+    """Création de la vue des issues en liste 
+       et en détail. Mise en place de la possibilité 
+       d'ajouter une nouvelle issue"""
+
     serializer_class = IssueListSerializer
     detail_serializer_class = IssueDetailSerializer
     permission_classes = [IsAuthenticated, IsInTheProject]
@@ -82,6 +93,9 @@ class IssuesrViewSet(ModelViewSet):
 
 class CommentViewset(ModelViewSet):
 
+    """Création de la vue des commentaires en liste 
+       et en détail. Mise en place de la possibilité 
+       d'ajouter un nouveau commentaire"""
     
     serializer_class = CommentListSerializer
     detail_serializer_class = CommentDetailSerializer
@@ -104,6 +118,9 @@ class CommentViewset(ModelViewSet):
 
 @api_view(['POST',])   
 def RegisterViewset(request):
+
+    """Création de la vue de la création de compte."""
+
     if request.method == 'POST':
 
         serializer = RegisterSerializer(data = request.data)
