@@ -21,7 +21,7 @@ class IsInTheProject(BasePermission):
 
         #On vérifie si le USER fait partie des contributeurs du projet
         for contributor in contributors:
-            if contributor.project_id.id == int(project_actif_id) and contributor.user_id == user_connected:
+            if contributor.project_id.id == int(project_actif_id) and contributor.user_id == user_connected or author_id == user_connected:
                 validation = True
                 break
             else:

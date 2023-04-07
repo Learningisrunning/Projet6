@@ -48,10 +48,23 @@ class ContributorViewSet(ModelViewSet):
     serializer_class = ContributorListSerializer
     detail_serializer_class = ContributorDetailSerializer
     permission_classes = [IsAuthenticated]
+    
 
     def get_queryset(self):
-        return Contributor.objects.all()
-    
+            
+        if self.action != 'retrieve' and self.action != 'destroy':
+            list_contrib_of_the_project = []
+            project_number = self.kwargs['projets_pk']
+            contributors = Contributor.objects.all()
+
+            for contributor in contributors:
+                if contributor.project_id.id == int(project_number):
+                    list_contrib_of_the_project.append(contributor)
+            
+            return list_contrib_of_the_project
+        else :
+            return Contributor.objects.all()
+        
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return self.detail_serializer_class
@@ -76,7 +89,19 @@ class IssuesrViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, IsInTheProject]
 
     def get_queryset(self):
-        return Issue.objects.all()
+        if self.action != 'retrieve' and self.action != 'destroy' and self.action != 'update':
+            list_issues_of_the_project = []
+            project_number = self.kwargs['projets_pk']
+            issues = Issue.objects.all()
+
+            for issue in issues:
+                print(issue.project_related.id)
+                if issue.project_related.id == int(project_number):
+                    list_issues_of_the_project.append(issue)
+            
+            return list_issues_of_the_project
+        else :
+            return Issue.objects.all()
     
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -102,7 +127,20 @@ class CommentViewset(ModelViewSet):
     permission_classes = [IsAuthenticated, IsInTheProject]
 
     def get_queryset(self):
-        return Comment.objects.all()
+
+        if self.action != 'retrieve' and self.action != 'destroy' and self.action != 'update':
+            list_comment_of_the_project = []
+            issue_number = self.kwargs['issues_pk']
+            comments = Comment.objects.all()
+
+            for comment in comments:
+                print(comment.issue.id)
+                if comment.issue.id == int(issue_number):
+                    list_comment_of_the_project.append(comment)
+            
+            return list_comment_of_the_project
+        else :
+            return Comment.objects.all()
     
     def get_serializer_class(self):
         if self.action == 'retrieve':
